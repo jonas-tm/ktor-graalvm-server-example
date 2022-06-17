@@ -1,11 +1,13 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
+val ktor_version: String by extra { "2.0.2" }
+val kotlin_version: String by extra { "1.7.0" }
+val logback_version: String by extra { "1.2.3" }
+val exposed_version: String by extra { "0.38.2" }
+val h2_version: String by extra { "2.1.214" }
 
 plugins {
     application
-    kotlin("jvm") version "1.6.21"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0"
     id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
@@ -33,7 +35,15 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-cio:$ktor_version")
 
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("com.h2database:h2:$h2_version")
+
     implementation("ch.qos.logback:logback-classic:$logback_version")
+
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+
 }
