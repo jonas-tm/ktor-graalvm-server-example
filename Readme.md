@@ -19,5 +19,14 @@ This repository contains an example project to build a ktor jvm server with Graa
 - Run with `./graal-server`
 
 ## Known Issues
-- Serialization is not working for native-image
-  - Follow [this GitHub Issue](https://github.com/Kotlin/kotlinx.serialization/issues/1348) for progress
+- Serialization is not working for native-image out of the box
+  - Follow [this GitHub Issue](https://github.com/Kotlin/kotlinx.serialization/issues/1348) for progress 
+  - Somewhat workaround: Analyze reflection by running Jar with tracing mode
+    - Run `./gradlw :shardowJar`
+    - Copy jar from `/build/libs` to main folder
+    - Create a folder `/reflection`
+    - Run `java -agentlib:native-image-agent=config-output-dir=reflect -jar com.example.sample-0.0.1-all.jar`
+    - Hit all endpoint in all variants once
+    - Copy content of json array `/reflection/reflect-config.json` 
+    - Add content at the end of json array in `/reflection.json`
+    - *Seems not to be fixing list news endpoint*
