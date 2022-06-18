@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 val ktor_version: String by extra { "2.0.2" }
 val kotlin_version: String by extra { "1.7.0" }
 val logback_version: String by extra { "1.2.3" }
@@ -23,6 +25,10 @@ application {
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
+}
+
+tasks.withType<ShadowJar> {
+    archiveFileName.set("shadow.jar")
 }
 
 dependencies {

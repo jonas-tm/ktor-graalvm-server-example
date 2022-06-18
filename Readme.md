@@ -18,6 +18,10 @@ This repository contains an example project to build a ktor jvm server with Graa
   - *This first builds a shadow jar with gradle and then trigger native-image build*
 - Run with `./graal-server`
 
+## Docker Image (not tested!)
+- Use `Dockerfile` for multistage native-image build.
+- Results image is minmal size based of `scratch`
+
 ## Known Issues
 - Serialization is not working for native-image out of the box
   - Follow [this GitHub Issue](https://github.com/Kotlin/kotlinx.serialization/issues/1348) for progress 
