@@ -1,10 +1,6 @@
-FROM eclipse-temurin:17 AS JAR_IMAGE
+FROM ghcr.io/graalvm/native-image:22.1.0 AS NATIVE_IMAGE
 COPY . .
 RUN ./gradlew shadowJar
-
-FROM ghcr.io/graalvm/native-image:22.1.0 AS NATIVE_IMAGE
-COPY --from=JAR_IMAGE /build/libs/shadow.jar shadow.jar
-COPY reflection.json reflection.json
 RUN native-image --no-fallback  \
     --enable-all-security-services  \
     --report-unsupported-elements-at-runtime \
@@ -14,7 +10,7 @@ RUN native-image --no-fallback  \
     -H:+ReportUnsupportedElementsAtRuntime  \
     -H:+ReportExceptionStackTraces  \
     -H:ReflectionConfigurationFiles=reflection.json  \
-    -cp shadow.jar  \
+    -cp ./build/libs/shadow.jar  \
     -H:Class=com.example.ApplicationKt  \
     -H:Name=nativeimage
 
