@@ -64,6 +64,7 @@ graalvmNative {
 //            buildArgs.add("--report-unsupported-elements-at-runtime")
 //            buildArgs.add("--install-exit-handlers")
 //            buildArgs.add("--allow-incomplete-classpath")
+//            useFatJar.set(true)
 
             buildArgs.add("--initialize-at-build-time=io.ktor,kotlin,kotlinx,org.slf4j")
 
