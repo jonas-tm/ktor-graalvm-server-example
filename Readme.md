@@ -14,9 +14,13 @@ This repository contains an example project to build a ktor jvm server with Graa
 - native-image installed (uss `gu`) and reachable
 
 ## Build & Run native image
-- Build native image using `./build.sh`
-  - *This first builds a shadow jar with gradle and then trigger native-image build*
-- Run with `./graal-server`
+- Old approach by hand
+  - Build native image using `./build.sh`
+    - *This first builds a fat (shadow) jar with gradle and then trigger native-image build*
+  - Run with `./graal-server`
+- New approach (not working yet)
+  - `./gradlew nativeCompile`
+  - Run with `./graal-server`
 
 ## Docker Image (not tested!)
 - Use `Dockerfile` for multistage native-image build.
