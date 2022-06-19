@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val ktor_version: String by extra { "2.0.2" }
 val kotlin_version: String by extra { "1.7.0" }
-val logback_version: String by extra { "1.2.11" }
+val logback_version: String by extra { "1.2.3" }
 val exposed_version: String by extra { "0.38.2" }
 val h2_version: String by extra { "2.1.214" }
 
@@ -59,6 +59,11 @@ graalvmNative {
         named("main") {
             fallback.set(false)
             verbose.set(true)
+
+//            buildArgs.add("--enable-all-security-services")
+//            buildArgs.add("--report-unsupported-elements-at-runtime")
+//            buildArgs.add("--install-exit-handlers")
+//            buildArgs.add("--allow-incomplete-classpath")
 
             buildArgs.add("--initialize-at-build-time=io.ktor,kotlin,kotlinx,org.slf4j")
 
