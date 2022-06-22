@@ -31,8 +31,8 @@ This repository contains an example project to build a ktor jvm server with Graa
   - Follow [this GitHub Issue](https://github.com/Kotlin/kotlinx.serialization/issues/1348) for progress 
   - Somewhat workaround: Analyze reflection by running Jar with tracing mode
     - Run `./gradlw :shardowJar`
-    - Copy jar from `/build/libs/com.example.sample-0.0.1-all.jar` to main folder
+    - Copy jar from `/build/libs/shadow.jar` to main folder
     - Create a folder `/reflection`
-    - Run `java -agentlib:native-image-agent=config-output-dir=reflect -jar com.example.sample-0.0.1-all.jar`
+    - Run `java -agentlib:native-image-agent=config-output-dir=reflect -jar shadow.jar`
     - Hit all endpoint in all variants once
     - Copy content of `/reflection` to classpath folder `/src/main/resources/META-INF/native-image`

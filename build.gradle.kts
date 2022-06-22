@@ -39,7 +39,7 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-cio:$ktor_version")
 
-    implementation("io.ktor:ktor-serialization-gson-jvm:$ktor_version")
+//    implementation("io.ktor:ktor-serialization-gson-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")

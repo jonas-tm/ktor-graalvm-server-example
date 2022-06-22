@@ -27,7 +27,6 @@
     "allDeclaredConstructors":true
   },
 
-
 {
   "name":"ch.qos.logback.classic.encoder.PatternLayoutEncoder",
   "queryAllPublicMethods":true,
@@ -81,7 +80,11 @@
 },
 {
   "name":"com.example.models.NewsEntry",
-  "allDeclaredFields":true
+  "fields":[{"name":"Companion"}]
+},
+{
+  "name":"com.example.models.NewsEntry$Companion",
+  "methods":[{"name":"serializer","parameterTypes":[] }]
 },
 {
   "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
@@ -117,13 +120,6 @@
 },
 {
   "name":"java.security.SecurityPermission"
-},
-{
-  "name":"java.sql.Date"
-},
-{
-  "name":"java.util.ArrayList",
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"java.util.List"
@@ -162,11 +158,6 @@
 {
   "name":"org.h2.Driver",
   "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.misc.Unsafe",
-  "fields":[{"name":"theUnsafe"}],
-  "methods":[{"name":"allocateInstance","parameterTypes":["java.lang.Class"] }]
 },
 {
   "name":"sun.security.provider.SHA",
