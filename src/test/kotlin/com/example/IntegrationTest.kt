@@ -33,7 +33,7 @@ class IntegrationTest {
     }
 
     @Test
-    fun `GET all news test`() = testServer {
+    fun `GET all news`() = testServer {
         it.get("/api/v1/news").apply {
             assertEquals(HttpStatusCode.OK, status)
             val content = body<List<NewsEntry>>()
@@ -43,7 +43,7 @@ class IntegrationTest {
     }
 
     @Test
-    fun `GET specific news test`() = testServer {
+    fun `GET specific news`() = testServer {
         it.get("/api/v1/news/1").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(defaultEntry, body())
@@ -51,7 +51,7 @@ class IntegrationTest {
     }
 
     @Test
-    fun `POST specific news test`() = testServer {
+    fun `POST specific news`() = testServer {
         it.post("/api/v1/news") {
             contentType(ContentType.Application.Json)
             setBody(defaultEntry)

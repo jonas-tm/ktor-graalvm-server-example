@@ -11,16 +11,14 @@ This repository contains an example project to build a ktor jvm server with Graa
 ## Required
 - Linux/MacOS
 - GraalVM installed and set as environment variable `JAVA_HOME` (sdkman easiest variant)
-- native-image installed (uss `gu`) and reachable
+- native-image installed (use `gu`) and reachable
 
 ## Build & Run native image
-- Old approach by hand
-  - Build native image using `./build.sh`
-    - *This first builds a fat (shadow) jar with gradle and then trigger native-image build*
-  - Run with `./graal-server`
-- New approach (not working yet)
+- Directly run with `./gradlew nativeRun`
+- Compile
   - `./gradlew nativeCompile`
   - Run with `./graal-server`
+- Use option `--native-quick-build` or evironment variable `GRAALVM_QUICK_BUILD=true` for faster builds
 
 ## Docker Image (not tested!)
 - Use `Dockerfile` for multistage native-image build.
@@ -30,9 +28,4 @@ This repository contains an example project to build a ktor jvm server with Graa
 - Serialization is not working for native-image out of the box
   - Follow [this GitHub Issue](https://github.com/Kotlin/kotlinx.serialization/issues/1348) for progress 
   - Somewhat workaround: Analyze reflection by running Jar with tracing mode
-    - Run `./gradlw :shardowJar`
-    - Copy jar from `/build/libs/shadow.jar` to main folder
-    - Create a folder `/reflection`
-    - Run `java -agentlib:native-image-agent=config-output-dir=reflect -jar shadow.jar`
-    - Hit all endpoint in all variants once
-    - Copy content of `/reflection` to classpath folder `/src/main/resources/META-INF/native-image`
+    - Run `./gradlew metadataCopy --task run --dir src/main/resources/META-INF/native-image`

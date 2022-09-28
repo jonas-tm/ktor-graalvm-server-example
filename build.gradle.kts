@@ -1,16 +1,14 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-val ktor_version: String by extra { "2.0.2" }
-val kotlin_version: String by extra { "1.7.0" }
-val logback_version: String by extra { "1.2.3" }
-val exposed_version: String by extra { "0.38.2" }
+val ktor_version: String by extra { "2.1.1" }
+val kotlin_version: String by extra { "1.7.10" }
+val logback_version: String by extra { "1.4.1" }
+val exposed_version: String by extra { "0.39.2" }
 val h2_version: String by extra { "2.1.214" }
 
 plugins {
     application
-    kotlin("jvm") version "1.7.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0"
-    id("org.graalvm.buildtools.native") version "0.9.11"
+    kotlin("jvm") version "1.7.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
+    id("org.graalvm.buildtools.native") version "0.9.14"
     id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
@@ -25,21 +23,17 @@ application {
 
 repositories {
     mavenCentral()
-}
-
-tasks.withType<ShadowJar> {
-    archiveFileName.set("shadow.jar")
+    gradlePluginPortal()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     implementation("io.ktor:ktor-server-compression-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-cio:$ktor_version")
 
-//    implementation("io.ktor:ktor-serialization-gson-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
@@ -55,18 +49,22 @@ dependencies {
 }
 
 graalvmNative {
+    metadataRepository {
+        enabled.set(true)
+    }
+
     binaries {
         named("main") {
+            useFatJar.set(true)
             fallback.set(false)
-            verbose.set(true)
+//            verbose.set(true)
 
-//            buildArgs.add("--enable-all-security-services")
-//            buildArgs.add("--report-unsupported-elements-at-runtime")
-//            buildArgs.add("--install-exit-handlers")
-//            buildArgs.add("--allow-incomplete-classpath")
-//            useFatJar.set(true)
+            buildArgs.add("--enable-all-security-services")
+            buildArgs.add("--report-unsupported-elements-at-runtime")
+            buildArgs.add("--install-exit-handlers")
+            buildArgs.add("--allow-incomplete-classpath")
 
-            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin,kotlinx,org.slf4j")
+            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin,kotlinx,org.slf4j,ch.qos.logback")
 
             buildArgs.add("-H:+InstallExitHandlers")
             buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")

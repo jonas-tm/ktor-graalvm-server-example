@@ -36,7 +36,7 @@ fun Application.configureRouting(newsService: NewsService) {
                 }
 
                 post("") {
-                    val newsEntry = call.receiveOrNull<NewsEntry>()
+                    val newsEntry = call.receiveNullable<NewsEntry>()
 
                     newsEntry?.let {
                         call.respond(newsService.addNewsEntry(newsEntry))
