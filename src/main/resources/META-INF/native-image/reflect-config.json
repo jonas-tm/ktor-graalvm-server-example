@@ -86,6 +86,14 @@
   "name":"com.example.models.NewsEntry$Companion",
   "methods":[{"name":"serializer","parameterTypes":[] }]
 },
+  {
+    "name":"com.example.models.ErrorResp",
+    "fields":[{"name":"Companion"}]
+  },
+  {
+    "name":"com.example.models.ErrorResp$Companion",
+    "methods":[{"name":"serializer","parameterTypes":[] }]
+  },
 {
   "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -166,5 +174,23 @@
 {
   "name":"sun.security.provider.SecureRandom",
   "methods":[{"name":"<init>","parameterTypes":[] }]
-}
+},
+
+
+  {
+    "name":"com.sun.management.OperatingSystemMXBean",
+    "methods":[
+      {"name":"getCpuLoad","parameterTypes":[] },
+      {"name":"getProcessCpuLoad","parameterTypes":[] },
+      {"name":"getSystemCpuLoad","parameterTypes":[] }
+    ]
+  },
+  {
+    "name":"com.sun.management.UnixOperatingSystemMXBean",
+    "methods":[
+      {"name":"getMaxFileDescriptorCount","parameterTypes":[] },
+      {"name":"getOpenFileDescriptorCount","parameterTypes":[] }
+    ]
+  }
+
 ]

@@ -1,8 +1,9 @@
-val ktor_version: String by extra { "2.1.1" }
-val kotlin_version: String by extra { "1.7.10" }
-val logback_version: String by extra { "1.4.1" }
-val exposed_version: String by extra { "0.39.2" }
-val h2_version: String by extra { "2.1.214" }
+val ktor_version =  "2.1.1"
+val kotlin_version =  "1.7.10"
+val logback_version =  "1.4.1"
+val exposed_version =  "0.39.2"
+val h2_version =  "2.1.214"
+val prometheus_version = "1.9.4"
 
 plugins {
     application
@@ -34,7 +35,12 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-cio:$ktor_version")
 
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
+    implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
+    implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")

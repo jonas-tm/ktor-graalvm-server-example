@@ -12,6 +12,8 @@ fun main() {
 
     embeddedServer(CIO, port = 8080, host = "0.0.0.0") {
         configureHTTP()
+        configureErrorHandling()
+        configureMonitoring()
         configureAdministration()
         configureRouting(newsService)
         configureSerialization()

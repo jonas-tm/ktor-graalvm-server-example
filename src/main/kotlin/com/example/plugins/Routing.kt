@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.models.ErrorResp
 import com.example.models.NewsEntry
 import com.example.services.NewsService
 import io.ktor.http.*
@@ -30,9 +31,8 @@ fun Application.configureRouting(newsService: NewsService) {
                     id?.let {
                         newsService.getNewsEntry(it)?.let {
                             call.respond(it)
-                        } ?: call.respond(HttpStatusCode.NotFound, Error("No news entry with id $it."))
-
-                    }?: call.respond(HttpStatusCode.NotFound, Error("Missing or invalid news id in path."))
+                        } ?: call.respond(HttpStatusCode.NotFound, ErrorResp("No news entry with id $it."))
+                    } ?: call.respond(HttpStatusCode.NotFound, ErrorResp("Missing or invalid news id in path."))
                 }
 
                 post("") {
@@ -40,8 +40,7 @@ fun Application.configureRouting(newsService: NewsService) {
 
                     newsEntry?.let {
                         call.respond(newsService.addNewsEntry(newsEntry))
-                    } ?: call.respond(HttpStatusCode.BadRequest, Error("Invalid body"))
-
+                    } ?: call.respond(HttpStatusCode.BadRequest, ErrorResp("Invalid body"))
                 }
             }
         }

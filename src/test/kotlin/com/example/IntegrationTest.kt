@@ -1,6 +1,9 @@
 package com.example
 
+import com.example.models.ErrorResp
 import com.example.models.NewsEntry
+import com.example.plugins.DEFAULT_ERROR
+import com.example.plugins.configureErrorHandling
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSerialization
 import com.example.services.NewsService
@@ -18,10 +21,11 @@ val defaultEntry = NewsEntry(1, "A", "B")
 
 class IntegrationTest {
 
-    fun testServer(f: suspend (HttpClient) -> Unit) = testApplication {
+    fun testServer(newsService: NewsService, f: suspend (HttpClient) -> Unit) = testApplication {
         application {
             configureSerialization()
-            configureRouting(NewsServiceMock())
+            configureErrorHandling()
+            configureRouting(newsService)
         }
 
         val client = createClient {
@@ -33,7 +37,7 @@ class IntegrationTest {
     }
 
     @Test
-    fun `GET all news`() = testServer {
+    fun `GET all news`() = testServer(NewsServiceMock()) {
         it.get("/api/v1/news").apply {
             assertEquals(HttpStatusCode.OK, status)
             val content = body<List<NewsEntry>>()
@@ -43,7 +47,15 @@ class IntegrationTest {
     }
 
     @Test
-    fun `GET specific news`() = testServer {
+    fun `GET all news err`() = testServer(ErrorServiceMock()) {
+        it.get("/api/v1/news").apply {
+            assertEquals(HttpStatusCode.InternalServerError, status)
+            assertEquals(DEFAULT_ERROR, body())
+        }
+    }
+
+    @Test
+    fun `GET specific news`() = testServer(NewsServiceMock()) {
         it.get("/api/v1/news/1").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(defaultEntry, body())
@@ -51,13 +63,32 @@ class IntegrationTest {
     }
 
     @Test
-    fun `POST specific news`() = testServer {
+    fun `GET specific news error`() = testServer(ErrorServiceMock()) {
+        it.get("/api/v1/news/1").apply {
+            assertEquals(HttpStatusCode.InternalServerError, status)
+            assertEquals(DEFAULT_ERROR, body())
+        }
+    }
+
+    @Test
+    fun `POST specific news`() = testServer(NewsServiceMock()) {
         it.post("/api/v1/news") {
             contentType(ContentType.Application.Json)
             setBody(defaultEntry)
         }.apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(defaultEntry, body())
+        }
+    }
+
+    @Test
+    fun `POST specific news error`() = testServer(ErrorServiceMock()) {
+        it.post("/api/v1/news") {
+            contentType(ContentType.Application.Json)
+            setBody(defaultEntry)
+        }.apply {
+            assertEquals(HttpStatusCode.InternalServerError, status)
+            assertEquals(DEFAULT_ERROR, body())
         }
     }
 }
@@ -73,5 +104,19 @@ private class NewsServiceMock : NewsService {
 
     override suspend fun addNewsEntry(newsEntry: NewsEntry): NewsEntry {
         return defaultEntry
+    }
+}
+
+private class ErrorServiceMock : NewsService {
+    override suspend fun getAllNewsEntries(): List<NewsEntry> {
+        throw Exception("some error")
+    }
+
+    override suspend fun getNewsEntry(id: Long): NewsEntry {
+        throw Exception("some error")
+    }
+
+    override suspend fun addNewsEntry(newsEntry: NewsEntry): NewsEntry {
+        throw Exception("some error")
     }
 }
