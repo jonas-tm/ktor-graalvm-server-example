@@ -44,13 +44,15 @@ class IntegrationTest {
     }
 
     @Test
-    fun `GET all news with requestID`() = testServer(ErrorServiceMock()) {
+    fun `GET all news with requestID`() = testServer(NewsServiceMock()) {
         val id = "2238_asd1-85c"
         it.get("/api/v1/news") {
             header(REQUEST_ID_HEADER, id)
         }.apply {
-            assertEquals(HttpStatusCode.InternalServerError, status)
-            assertEquals(DEFAULT_ERROR, body())
+            assertEquals(HttpStatusCode.OK, status)
+            val content = body<List<NewsEntry>>()
+            assertEquals(1, content.size)
+            assertEquals(defaultEntry, content.get(0))
             assertEquals(id, headers[REQUEST_ID_HEADER])
         }
     }
@@ -61,6 +63,18 @@ class IntegrationTest {
             assertEquals(HttpStatusCode.InternalServerError, status)
             assertEquals(DEFAULT_ERROR, body())
             assertNotNull(headers[REQUEST_ID_HEADER])
+        }
+    }
+
+    @Test
+    fun `GET all news err with requestID`() = testServer(ErrorServiceMock()) {
+        val id = "2238_asd1-85c"
+        it.get("/api/v1/news") {
+            header(REQUEST_ID_HEADER, id)
+        }.apply {
+            assertEquals(HttpStatusCode.InternalServerError, status)
+            assertEquals(DEFAULT_ERROR, body())
+            assertEquals(id, headers[REQUEST_ID_HEADER])
         }
     }
 
