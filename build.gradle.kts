@@ -36,6 +36,7 @@ dependencies {
     implementation("io.ktor:ktor-server-cio:$ktor_version")
 
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+    implementation("io.ktor:ktor-server-call-id:$ktor_version")
 
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 

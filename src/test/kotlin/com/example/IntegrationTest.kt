@@ -2,10 +2,7 @@ package com.example
 
 import com.example.models.ErrorResp
 import com.example.models.NewsEntry
-import com.example.plugins.DEFAULT_ERROR
-import com.example.plugins.configureErrorHandling
-import com.example.plugins.configureRouting
-import com.example.plugins.configureSerialization
+import com.example.plugins.*
 import com.example.services.NewsService
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -16,16 +13,15 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 val defaultEntry = NewsEntry(1, "A", "B")
 
 class IntegrationTest {
 
-    fun testServer(newsService: NewsService, f: suspend (HttpClient) -> Unit) = testApplication {
+    private fun testServer(newsService: NewsService, f: suspend (HttpClient) -> Unit) = testApplication {
         application {
-            configureSerialization()
-            configureErrorHandling()
-            configureRouting(newsService)
+            setupServer(newsService)
         }
 
         val client = createClient {
@@ -43,6 +39,19 @@ class IntegrationTest {
             val content = body<List<NewsEntry>>()
             assertEquals(1, content.size)
             assertEquals(defaultEntry, content.get(0))
+            assertNotNull(headers[REQUEST_ID_HEADER])
+        }
+    }
+
+    @Test
+    fun `GET all news with requestID`() = testServer(ErrorServiceMock()) {
+        val id = "2238_asd1-85c"
+        it.get("/api/v1/news") {
+            header(REQUEST_ID_HEADER, id)
+        }.apply {
+            assertEquals(HttpStatusCode.InternalServerError, status)
+            assertEquals(DEFAULT_ERROR, body())
+            assertEquals(id, headers[REQUEST_ID_HEADER])
         }
     }
 
@@ -51,6 +60,7 @@ class IntegrationTest {
         it.get("/api/v1/news").apply {
             assertEquals(HttpStatusCode.InternalServerError, status)
             assertEquals(DEFAULT_ERROR, body())
+            assertNotNull(headers[REQUEST_ID_HEADER])
         }
     }
 
@@ -59,6 +69,7 @@ class IntegrationTest {
         it.get("/api/v1/news/1").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(defaultEntry, body())
+            assertNotNull(headers[REQUEST_ID_HEADER])
         }
     }
 
@@ -67,6 +78,7 @@ class IntegrationTest {
         it.get("/api/v1/news/1").apply {
             assertEquals(HttpStatusCode.InternalServerError, status)
             assertEquals(DEFAULT_ERROR, body())
+            assertNotNull(headers[REQUEST_ID_HEADER])
         }
     }
 
@@ -78,6 +90,7 @@ class IntegrationTest {
         }.apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(defaultEntry, body())
+            assertNotNull(headers[REQUEST_ID_HEADER])
         }
     }
 
@@ -89,6 +102,7 @@ class IntegrationTest {
         }.apply {
             assertEquals(HttpStatusCode.InternalServerError, status)
             assertEquals(DEFAULT_ERROR, body())
+            assertNotNull(headers[REQUEST_ID_HEADER])
         }
     }
 }

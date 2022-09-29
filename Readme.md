@@ -8,6 +8,7 @@ This repository contains an example project to build a ktor jvm server with Graa
 - H2 in-memory database
 - Micrometer + Prometheus monitoring
 - Automatic error handling
+- CallID plugin
 - Custom Logging Middleware (Ktor Application Plugin)
 
 ## Required

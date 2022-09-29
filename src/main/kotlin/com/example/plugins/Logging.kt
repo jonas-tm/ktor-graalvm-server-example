@@ -2,6 +2,7 @@ package com.example.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.application.hooks.*
+import io.ktor.server.plugins.callid.*
 import io.ktor.server.request.*
 import io.ktor.util.*
 import kotlinx.datetime.Clock
@@ -23,7 +24,7 @@ val RequestLoggingPlugin = createApplicationPlugin(name = "RequestLoggingPlugin"
 
         val status = call.response.status()?.value ?: -1
 
-        application.log.info("[${call.request.httpMethod.value}] Request handled --> [uri]: ${call.request.uri}, [status]: $status, [duration]: ${duration}ms, [http]: ${call.request.httpVersion}, [time]: $timeReq")
+        application.log.info("[${call.request.httpMethod.value}] Request handled --> [reqID]: ${call.callId} [uri]: ${call.request.uri}, [status]: $status, [duration]: ${duration}ms, [http]: ${call.request.httpVersion}, [time]: $timeReq")
     }
 
     on(CallSetup) { call ->

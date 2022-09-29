@@ -1,1 +1,1 @@
-rootProject.name = "com.example.sample"
+rootProject.name = "ktor-graalvm-server-example"
